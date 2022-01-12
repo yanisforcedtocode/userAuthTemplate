@@ -30,8 +30,13 @@ exports.signup = asyncWrapper(async (req, res, next) => {
   }
 })
 exports.login = asyncWrapper(async(req,res,next)=>{
-  //passport.authenticate('jwt', { session: false })
   const {email, psw} = req.body
+  const cookieOptions = {
+    httpOnly:true,
+    expires: new Date(Date.now() + 900000)
+    //secure: true,
+    //sameSite: false
+  }
   console.log(`login from ${email}`)
   const oldUser  = await User.findOne({email:email}).select(['psw', 'email', '_id'])
   if (oldUser){
@@ -44,15 +49,15 @@ exports.login = asyncWrapper(async(req,res,next)=>{
         email: oldUser.email
       }
       const jwtOption = {
-        expiresIn: process.env.jwtExpiry
+        expiresIn: process.env.jwtExpiry,
+
       }
       jwt.sign(payload, process.env.jwtSecret, jwtOption, (err, token)=>{
-        //const authHeader = req.headers.authorization;
-        cookieParser(process.env.AppName, token)
-        res.cookie('jwtToken', token)
+        res.cookie('jwtToken', token,cookieOptions)
         return res.status(200).json({
           status: 'success',
-          message: 'cookie signed with jwt'
+          message: 'cookie signed with jwt',
+          //token:token
         })
       })
     }else{
@@ -76,8 +81,11 @@ exports.logout = asyncWrapper(async(req,res,next)=>{
   })
 })
 exports.authenticate = asyncWrapper(async (req, res, next)=>{
+  console.log(req.user._id)
   res.status(201).json({
     status: 'success',
-    message: 'authenticated'
+    message: 'jwt is valid',
+    email: req.user.email
   })
 })
+
