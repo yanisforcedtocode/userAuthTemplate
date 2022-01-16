@@ -12,7 +12,7 @@ const credentials = {
   cert: fs.readFileSync('cert.pem')
 };
 const httpServer = http.createServer(app);
-const httpsServer = https.createServer(credentials, app);
+//const httpsServer = https.createServer(credentials, app);
 httpServer.listen(process.env.port, ()=>{
   console.log(`${process.env.AppName} is running on ${process.env.port}`)})
 /*httpsServer.listen(process.env.portHTTPS, ()=>{

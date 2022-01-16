@@ -40,6 +40,11 @@ const userSchema = new mongoose.Schema({
       type: Boolean,
       default: true
     },
+    authority:{
+      type: String,
+      enum: ["user", "admin"],
+      default: "user"
+    },
     pswChangedAt: Date
   });
 
@@ -52,6 +57,7 @@ userSchema.pre('save', async function(next){
     this.psw = await bcrypt.hash(this.psw, 12);
     // Delete the pswConfirm field
     this.pswConfirm = undefined;
+    this.pswChangedAt = currentTime
     next()
   } catch (error) {
     next(error)
