@@ -13,7 +13,8 @@ const corsOptions = {
   origin: 'http://localhost:3001/',
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
-  allowedHeaders: ["Content-Type", "application/json",'Accept'],
+  allowedHeaders: "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
+  preflightContinue: true,
   optionsSuccessStatus: 200,
 }
 //============= require handlers =============//
